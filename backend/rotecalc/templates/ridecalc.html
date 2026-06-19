@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<!--
+  RideCalc - Calculadora de lucro para motoristas de aplicativo
+  
+  ESTRUTURA GERAL DA PÁGINA:
+  ┌─────────────────────────────────┐
+  │  <header>  →  Cabeçalho / Logo  │
+  ├─────────────────────────────────┤
+  │  <main>    →  Conteúdo principal│
+  │   ├── <section> hero            │
+  │   ├── <section> calculadora     │
+  │   └── <section> resultado       │
+  ├─────────────────────────────────┤
+  │  <footer>  →  Rodapé            │
+  └─────────────────────────────────┘
+-->
+<html lang="pt-BR">
+
+<head>
+  <!-- charset: garante que acentos e caracteres especiais apareçam certo -->
+  <meta charset="UTF-8" />
+
+  <!-- viewport: essencial para o site funcionar bem no celular -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- título que aparece na aba do navegador -->
+  <title>RideCalc — Calcule seu lucro antes de aceitar</title>
+
+  <!-- fontes do Google Fonts: Syne (títulos) e Inter (corpo) -->
+  <link rel="stylesheet" href="{% static 'css/style.css'%}">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+</head>
+
+<body>
+
+  <!-- ===================================================
+       CABEÇALHO
+       Contém o logo. Em outras páginas (histórico, config),
+       você vai repetir esse header via template Django:
+       =================================================== -->
+  <header class="cabecalho">
+    <div class="container">
+      <!-- Logo: "Ride" normal + "Calc" amarelo -->
+      <a href="/" class="logo">
+        Ride<span>Calc</span>
+      </a>
+
+      <!-- Aqui você pode adicionar navegação futuramente -->
+      <!-- <nav> ... </nav> -->
+    </div>
+  </header>
+
+
+  <!-- ===================================================
+       CONTEÚDO PRINCIPAL
+       Tudo que o usuário realmente usa fica dentro do <main>
+       =================================================== -->
+  <main>
+
+    <!-- -------------------------------------------
+         SEÇÃO HERO
+         Apresenta o problema e a proposta do app
+         ------------------------------------------- -->
+    <section class="hero" aria-labelledby="titulo-hero">
+      <div class="container">
+
+        <!-- Chamada pequena — contextualiza o público -->
+        <span class="hero-eyebrow">Para motoristas de aplicativo</span>
+
+        <!-- Título principal — h1 só deve aparecer UMA vez por página -->
+        <h1 id="titulo-hero">
+          Veja o lucro <em>antes</em><br />de aceitar a corrida
+        </h1>
+
+        <!-- Subtítulo: explica o que o app faz em 1 frase -->
+        <p>
+          Informe o valor e a distância da corrida. O RideCalc calcula
+          seus custos reais e mostra se vale a pena.
+        </p>
+
+      </div>
+    </section>
+
+
+
+    <section class="calculadora" aria-labelledby="titulo-calculadora">
+      <div class="container">
+
+        <article class="card">
+
+          <h2 class="card-titulo" id="titulo-calculadora">
+            Dados da corrida
+          </h2>
+
+
+          <form action="{% url 'corridas_app' %}" method="POST" novalidate> {% csrf_token %}
+
+
+
+
+            <!-- ---- CAMPO: Valor da corrida ---- -->
+            <div class="campo">
+              <label for="valor-corrida">Valor da corrida</label>
+
+              <div class="input-wrapper">
+                <!-- Prefixo visual — não é enviado no formulário -->
+                <span class="input-prefixo" aria-hidden="true">R$</span>
+
+                <input
+                  type="number"
+                  id="valor-corrida"
+                  name="valor_corrida"
+                  placeholder="0,00"
+                  min="0"
+                  step="0.01"
+                  required
+                  autocomplete="off"
+                  aria-describedby="dica-valor"
+                />
+              </div>
+
+              <!-- Dica abaixo do campo -->
+              <p class="campo-dica" id="dica-valor">
+                Valor exibido pelo aplicativo antes de aceitar
+              </p>
+            </div>
+
+
+            <!-- ---- CAMPO: Distância ---- -->
+            <div class="campo">
+              <label for="distancia">Distância estimada</label>
+
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">km</span>
+
+                <input
+                  type="number"
+                  id="distancia"
+                  name="distancia"
+                  placeholder="0.0"
+                  min="0"
+                  step="0.1"
+                  required
+                  autocomplete="off"
+                  aria-describedby="dica-distancia"
+                />
+              </div>
+
+              <p class="campo-dica" id="dica-distancia">
+                Distância total mostrada no mapa da corrida
+              </p>
+            </div>
+
+
+            <!-- Separador visual entre dados da corrida e configurações -->
+            <hr class="divisor" />
+
+            <h3 class="card-titulo" style="font-size: 0.95rem; margin-bottom: 1rem;">
+              Seu veículo
+            </h3>
+
+
+            <!-- ---- CAMPO: Consumo do carro ---- -->
+            <div class="campo">
+              <label for="consumo">Consumo médio</label>
+
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">km/L</span>
+
+                <input
+                  type="number"
+                  id="consumo"
+                  name="consumo"
+                  placeholder="12.0"
+                  min="1"
+                  step="0.5"
+                  autocomplete="off"
+                  aria-describedby="dica-consumo"
+                />
+              </div>
+
+              <p class="campo-dica" id="dica-consumo">
+                Quantos km seu veículo faz por litro (ex: 12)
+              </p>
+            </div>
+
+
+            <!-- ---- CAMPO: Preço do combustível ---- -->
+            <div class="campo">
+              <label for="preco-combustivel">Preço do combustível</label>
+
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">R$/L</span>
+
+                <input
+                  type="number"
+                  id="preco-combustivel"
+                  name="preco_gasolina"
+                  placeholder="6.00"
+                  min="0"
+                  step="0.01"
+                  autocomplete="off"
+                  aria-describedby="dica-combustivel"
+                />
+              </div>
+
+              <p class="campo-dica" id="dica-combustivel">
+                Preço atual do combustível na sua cidade
+              </p>
+            </div>
+
+
+            </div>
+
+
+            <!-- ---- BOTÃO DE ENVIO ---- -->
+            <button type="submit" class="btn-calcular">
+              Calcular lucro →
+            </button>
+
+          </form>
+        </article>
+
+      </div>
+    </section>
+
+
+    <!-- -------------------------------------------
+         SEÇÃO DE RESULTADO
+         
+         No Django, você vai usar uma condicional:
+           {% if resultado %}
+             <section class="resultado"> ... </section>
+           {% endif %}
+         
+         Os valores como {{ resultado.lucro }} são
+         chamados de "template variables" do Django.
+         
+         Por enquanto, está com valores fixos só para
+         você visualizar o layout.
+         ------------------------------------------- -->
+    <section class="resultado" aria-labelledby="titulo-resultado" aria-live="polite">
+      <div class="container">
+
+        <article class="card">
+
+          <!-- Cabeçalho do resultado com status -->
+          <div class="painel-header">
+            <h2 id="titulo-resultado">Resultado da análise</h2>
+              {% if lucro > 0 %}
+                <span class="status-badge positivo">Vale a pena ✓</span>
+              {% else %}
+                <span class="status-badge negativo">Não compensa ✗</span>
+              {% endif %}
+            
+          </div>
+
+
+          <!-- Lucro líquido em destaque — número grande -->
+          <div class="lucro-display">
+            <p class="lucro-label">Seu lucro líquido</p>
+
+            <!--
+              Django: {{ resultado.lucro | floatformat:2 }}
+              A classe "positivo" ou "negativo" muda a cor
+            -->
+              {% if lucro > 0 %}
+                <p class="lucro-valor positivo">R${{lucro | floatformat:2 }} </p>
+              {% else %}
+                <p class="lucro-valor negativo">R${{lucro | floatformat:2 }} </p>
+              {% endif %}
+              <br>
+            <p class="rodape"> O resultado do lucro se baseia no valor da corrida e no custo com combustível.</p>
+          </div>
+
+
+          <!-- Grade com os detalhes do cálculo -->
+          <div class="metricas-grade" role="list">
+
+            <!-- Cada <div> abaixo é um "cartão de métrica" -->
+
+            <div class="metrica-item" role="listitem">
+              <p class="metrica-rotulo">Valor da corrida</p>
+              <p class="metrica-numero">R$ {{valor_corrida}}</p>
+            </div>
+
+
+            <div class="metrica-item" role="listitem">
+              <p class="metrica-rotulo">Custo com combustível</p>
+              <p class="metrica-numero"> R$ {{custo | floatformat:2 }} </p>
+            </div>
+
+            <div class="metrica-item" role="listitem">
+              <p class="metrica-rotulo">Distância total</p>
+              <p class="metrica-numero destaque">{{distancia}} km</p>
+            </div>
+
+            <div class="metrica-item" role="listitem">
+              <p class="metrica-rotulo">Litros Gastos</p>
+              <p class="metrica-numero"> {{litros_gastos | floatformat:2 }}L</p>
+            </div>
+
+          </div>
+          <!-- /metricas-grade -->
+
+        </article>
+
+      </div>
+    </section>
+
+
+  </main>
+  <!-- /main -->
+
+
+  <!-- ===================================================
+       RODAPÉ
+       Informações secundárias: créditos, links legais
+       =================================================== -->
+  <footer class="rodape">
+    <div class="container">
+      <p>
+        © 2025 RideCalc &mdash; Feito para motoristas de aplicativo.
+        <!-- &mdash; é o travessão longo — -->
+      </p>
+    </div>
+  </footer>
+
+
+</body>
+</html>
