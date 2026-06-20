@@ -6,10 +6,21 @@ from django.http import HttpResponse
 #FUNÇÃO VIEW DO SITE, CONVERSANDO COM A FUNÇÕES QUE CRIEI
 def corridas_app(request):
      if request.method == "POST":
+
         distancia = request.POST.get('distancia')
         consumo = request.POST.get('consumo')
         valor_corrida = request.POST.get('valor_corrida')
         preco_gasolina = request.POST.get('preco_gasolina')
+
+        for campo, valor in {"distancia":distancia, "consumo":consumo, "valor_corrida":valor_corrida, "preco_gasolina":preco_gasolina}.items():
+            erro = validar_campo(valor)
+
+            if erro:
+                return render(request, 'ridecalc.html',
+                context={"erro": erro,
+                "campo_erro":campo
+                })
+
         litros_gastos, custo, lucro = calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina)
         return render(request, 'ridecalc.html',
         context={
@@ -17,7 +28,7 @@ def corridas_app(request):
             "custo": custo,
             "lucro": lucro,
             "valor_corrida": valor_corrida,
-            "distancia": distancia
+            "distancia": distancia,
         })
      elif request.method == "GET":
         return render(request, 'ridecalc.html')
@@ -25,7 +36,26 @@ def corridas_app(request):
 
 #CRIANDO A FUNÇÃO QUE CALCULA TUDO
 def calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina):
+
     litros_gastos: float = float(distancia)/float(consumo)
+
     custo: float = litros_gastos * float(preco_gasolina)
+
     lucro: float = float(valor_corrida) - custo
     return(litros_gastos,custo,lucro)
+
+def validar_campo(valor):
+
+    if valor == None:
+        return("O campo não pode ser vazio.")
+
+    try:
+        valor = float(valor)
+        if valor <=0:
+            return("O valor precisa ser maior que 0.")
+
+    except ValueError:
+        return("Valor inválido.")
+
+
+

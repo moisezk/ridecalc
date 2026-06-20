@@ -152,10 +152,15 @@
                   aria-describedby="dica-distancia"
                 />
               </div>
-
-              <p class="campo-dica" id="dica-distancia">
-                Distância total mostrada no mapa da corrida
-              </p>
+              {% if "campo" == "distancia"%}
+                  <p class="campo-dica" id="dica-distancia">
+                  {{erro}}
+                </p>
+              {% else %}
+                  <p class="campo-dica" id="dica-distancia">
+                  Distância total mostrada no mapa da corrida
+                  </p>
+              {% endif %}
             </div>
 
 
