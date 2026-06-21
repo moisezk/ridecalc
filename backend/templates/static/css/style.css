@@ -99,23 +99,6 @@ body {
   color: var(--cor-acento);
 }
 
-/* Tag "Beta" ao lado do logo */
-.logo-badge {
-  display: inline-block;
-  background: var(--cor-card);
-  color: var(--cor-texto-fraco);
-  font-family: var(--fonte-corpo);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  border: 1px solid var(--cor-borda);
-  margin-left: 0.5rem;
-  vertical-align: middle;
-}
-
 
 /* =====================================================
    6. SEÇÃO HERO
@@ -261,6 +244,12 @@ body {
 .campo-dica {
   font-size: 0.78rem;
   color: var(--cor-texto-fraco);
+  margin-top: 0.4rem;
+}
+/*MENSAGEM DE ERRO*/
+.campo-erro {
+  font-size: 0.78rem;
+  color: var(--cor-perigo);
   margin-top: 0.4rem;
 }
 

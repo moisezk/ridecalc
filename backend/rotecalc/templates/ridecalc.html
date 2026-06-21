@@ -1,30 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
-<!--
-  RideCalc - Calculadora de lucro para motoristas de aplicativo
-  
-  ESTRUTURA GERAL DA PÁGINA:
-  ┌─────────────────────────────────┐
-  │  <header>  →  Cabeçalho / Logo  │
-  ├─────────────────────────────────┤
-  │  <main>    →  Conteúdo principal│
-  │   ├── <section> hero            │
-  │   ├── <section> calculadora     │
-  │   └── <section> resultado       │
-  ├─────────────────────────────────┤
-  │  <footer>  →  Rodapé            │
-  └─────────────────────────────────┘
--->
+
 <html lang="pt-BR">
 
 <head>
-  <!-- charset: garante que acentos e caracteres especiais apareçam certo -->
+
   <meta charset="UTF-8" />
 
-  <!-- viewport: essencial para o site funcionar bem no celular -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- título que aparece na aba do navegador -->
+
   <title>RideCalc — Calcule seu lucro antes de aceitar</title>
 
   <!-- fontes do Google Fonts: Syne (títulos) e Inter (corpo) -->
@@ -40,14 +26,9 @@
 
 <body>
 
-  <!-- ===================================================
-       CABEÇALHO
-       Contém o logo. Em outras páginas (histórico, config),
-       você vai repetir esse header via template Django:
-       =================================================== -->
+
   <header class="cabecalho">
     <div class="container">
-      <!-- Logo: "Ride" normal + "Calc" amarelo -->
       <a href="/" class="logo">
         Ride<span>Calc</span>
       </a>
@@ -58,28 +39,22 @@
   </header>
 
 
-  <!-- ===================================================
-       CONTEÚDO PRINCIPAL
-       Tudo que o usuário realmente usa fica dentro do <main>
-       =================================================== -->
+  <!-- Tudo que o usuário realmente usa fica dentro do <main>-->
   <main>
 
-    <!-- -------------------------------------------
-         SEÇÃO HERO
-         Apresenta o problema e a proposta do app
-         ------------------------------------------- -->
+
     <section class="hero" aria-labelledby="titulo-hero">
       <div class="container">
 
-        <!-- Chamada pequena — contextualiza o público -->
+
         <span class="hero-eyebrow">Para motoristas de aplicativo</span>
 
-        <!-- Título principal — h1 só deve aparecer UMA vez por página -->
+        <!-- Título principal-->
         <h1 id="titulo-hero">
           Veja o lucro <em>antes</em><br />de aceitar a corrida
         </h1>
 
-        <!-- Subtítulo: explica o que o app faz em 1 frase -->
+        <!-- Subtítulo -->
         <p>
           Informe o valor e a distância da corrida. O RideCalc calcula
           seus custos reais e mostra se vale a pena.
@@ -110,7 +85,7 @@
               <label for="valor-corrida">Valor da corrida</label>
 
               <div class="input-wrapper">
-                <!-- Prefixo visual — não é enviado no formulário -->
+
                 <span class="input-prefixo" aria-hidden="true">R$</span>
 
                 <input
@@ -125,11 +100,15 @@
                   aria-describedby="dica-valor"
                 />
               </div>
-
-              <!-- Dica abaixo do campo -->
-              <p class="campo-dica" id="dica-valor">
-                Valor exibido pelo aplicativo antes de aceitar
+              {% if campo_erro == "valor_corrida" %}
+              <p class="campo-erro" id="dica-valor">
+                  {{erro}}
               </p>
+              {% else %}
+                <p class="campo-dica" id="dica-valor">
+                  Valor exibido pelo aplicativo antes de aceitar
+                </p>
+              {% endif %}
             </div>
 
 
@@ -152,8 +131,8 @@
                   aria-describedby="dica-distancia"
                 />
               </div>
-              {% if "campo" == "distancia"%}
-                  <p class="campo-dica" id="dica-distancia">
+              {% if campo_erro == "distancia"%}
+                  <p class="campo-erro" id="dica-distancia">
                   {{erro}}
                 </p>
               {% else %}
@@ -190,10 +169,15 @@
                   aria-describedby="dica-consumo"
                 />
               </div>
-
+              {% if campo_erro == "consumo" %}
+                  <p class="campo-erro" id="dica-consumo">
+                  {{erro}}
+                  </p>
+              {% else %}
               <p class="campo-dica" id="dica-consumo">
                 Quantos km seu veículo faz por litro (ex: 12)
               </p>
+              {% endif %}
             </div>
 
 
@@ -215,10 +199,15 @@
                   aria-describedby="dica-combustivel"
                 />
               </div>
-
-              <p class="campo-dica" id="dica-combustivel">
-                Preço atual do combustível na sua cidade
-              </p>
+              {% if campo_erro == "preco_gasolina" %}
+                  <p class="campo-erro" id="dica-combustivel">
+                  {{erro}}
+                  </p>
+              {% else %}
+                  <p class="campo-dica" id="dica-combustivel">
+                 Preço atual do combustível na sua cidade.
+                  </p>
+              {% endif %}
             </div>
 
 
@@ -235,28 +224,12 @@
 
       </div>
     </section>
-
-
-    <!-- -------------------------------------------
-         SEÇÃO DE RESULTADO
-         
-         No Django, você vai usar uma condicional:
-           {% if resultado %}
-             <section class="resultado"> ... </section>
-           {% endif %}
-         
-         Os valores como {{ resultado.lucro }} são
-         chamados de "template variables" do Django.
-         
-         Por enquanto, está com valores fixos só para
-         você visualizar o layout.
-         ------------------------------------------- -->
+{% if lucro %}
     <section class="resultado" aria-labelledby="titulo-resultado" aria-live="polite">
       <div class="container">
 
         <article class="card">
 
-          <!-- Cabeçalho do resultado com status -->
           <div class="painel-header">
             <h2 id="titulo-resultado">Resultado da análise</h2>
               {% if lucro > 0 %}
@@ -268,14 +241,12 @@
           </div>
 
 
-          <!-- Lucro líquido em destaque — número grande -->
+
           <div class="lucro-display">
             <p class="lucro-label">Seu lucro líquido</p>
 
-            <!--
-              Django: {{ resultado.lucro | floatformat:2 }}
-              A classe "positivo" ou "negativo" muda a cor
-            -->
+
+
               {% if lucro > 0 %}
                 <p class="lucro-valor positivo">R${{lucro | floatformat:2 }} </p>
               {% else %}
@@ -319,21 +290,18 @@
 
       </div>
     </section>
-
+{% else %}
+{% endif %}
 
   </main>
   <!-- /main -->
 
 
-  <!-- ===================================================
-       RODAPÉ
-       Informações secundárias: créditos, links legais
-       =================================================== -->
+
   <footer class="rodape">
     <div class="container">
       <p>
         © 2025 RideCalc &mdash; Feito para motoristas de aplicativo.
-        <!-- &mdash; é o travessão longo — -->
       </p>
     </div>
   </footer>
