@@ -1,9 +1,13 @@
-from django.shortcuts import render #Conceito: recebo paramêtros da documentação, tais como, requisição, template e o contexto.
-from django.http import HttpResponse 
+from django.shortcuts import render, redirect #Conceito: recebo paramêtros da documentação, tais como, requisição, template e o contexto.
+from django.http import HttpResponse # nem to usando isso, foi so pra testar as vezes, ele retorna uma pagina ao inves de template ate onde eu sei
+from .models import Motorista #Importando o motomoto
+from django.contrib.auth import authenticate, login # essa delicinha é do próprio django, parceiro dms
 # Create your views here.
 
 
 #FUNÇÃO VIEW DO SITE, CONVERSANDO COM A FUNÇÕES QUE CRIEI
+
+#=========================================VIEW CORRIDAS=========================================
 def corridas_app(request):
      if request.method == "POST":
 
@@ -12,12 +16,7 @@ def corridas_app(request):
         valor_corrida = request.POST.get('valor_corrida')
         preco_gasolina = request.POST.get('preco_gasolina')
 
-
-
-
-
-
-#AO INVÉS UMA VARIAVEL PARA CADA ERRO DE CAMPO, CRIEI UM FOR ONDE O CONTEXT DO MESMO CASA COM O HTML
+#->AO INVÉS DE UMA VARIAVEL PARA CADA ERRO DE CAMPO, CRIEI UM FOR ONDE O CONTEXT DO MESMO CASA COM O HTML
         for campo, valor in {"preco_gasolina":preco_gasolina, "distancia":distancia, "consumo":consumo, "valor_corrida":valor_corrida}.items():
             erro = validar_campo(valor)
 
@@ -27,11 +26,7 @@ def corridas_app(request):
                          "campo_erro":campo
                 })
 
-
-
-
-
-        #CONVERSANDO COM MINHA FUNÇÃO DE CALCULAR
+        #->CONVERSANDO COM MINHA FUNÇÃO DE CALCULAR
         litros_gastos, custo, lucro = calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina)
         return render(request, 'ridecalc.html',
         context={
@@ -44,13 +39,108 @@ def corridas_app(request):
      elif request.method == "GET":
         return render(request, 'ridecalc.html')
 
+#===========================<<<<<<<<<<<<<>>>>>>>>>>>>>>>>===============================================
 
 
 
 
+
+#=================>>>>>>>>>>>>>VIEW CADASTRO<<<<<<<<<<<<=========================================
+
+def cadastro_app(request):
+    if request.method == "POST":
+        nome = request.POST.get('nome')
+        username = request.POST.get('email')
+        senha = request.POST.get('senha')
+        confirma_senha = request.POST.get('confirma_senha')
+        modelo = request.POST.get('modelo')
+        consumo = request.POST.get('consumo')
+
+#TRATANDO CONFIRMAÇÃO DE SENHA BEM BASICAO
+        if senha != confirma_senha:
+            erro_senha = "Senha não confere."
+            return render(request, 'cadastro.html', context={
+                "erro_senha" : erro_senha
+                })
+        #AQUI EU TO SALVANDO NO BANCO DADOS, O REDIRECT É PRO USUARIO JA VOLTAR PRA TELA LOGIN
+        motorista = Motorista(first_name=nome,username=username,modelo=modelo, password=senha,consumo=consumo)
+        motorista.set_password(senha)
+        if Motorista:
+                #vou adicionar coisa calma, deixa pra manha sio
+        motorista.save()
+        return redirect('login_app')
+    elif request.method=="GET":
+        return render(request, 'cadastro.html')
+
+
+#===========================================<<<<<<<>>>>>>>>>>=====================================================
+
+
+
+#========================================VIEW LOGIN=================================
+
+def login_app(request):
+    username = request.POST.get('email')
+    senha = request.POST.get('senha')
+    usuario = authenticate(request,email=username,password=senha)
+    #ESTOU TRATANDO O ERRO DO USUARIO NAO EXISTIR:
+    if usuario:
+        login(request, usuario)
+        redirect('corridas_app')
+    else:
+        erro_login="Usuário não encontrado."
+        return render(request,'login.html',context={"erro_login":erro_login})
+
+#=================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#=========================FUNÇÕES DO APP================================>
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 #CRIANDO A FUNÇÃO QUE CALCULA TUDO
-def calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina):
+#=========================================================================>
+def calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina):      
 
     litros_gastos: float = float(distancia)/float(consumo)
 
@@ -58,14 +148,12 @@ def calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina):
 
     lucro: float = float(valor_corrida) - custo
     return(litros_gastos,custo,lucro)
-
-
-
-
+#========================================================================>
 
 
 
 #AQUI EU CRIEI UM TRATAMENTO PARA ERROS
+#======================================================>
 def validar_campo(valor):
 
     if valor == None:
@@ -78,6 +166,4 @@ def validar_campo(valor):
 
     except ValueError:
         return("Valor inválido.")
-
-
-
+#=======================================================>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+</head>
+<body>
+    <form action="{% url 'cadastro_app' %}" method="POST"> {% csrf_token %}
+        <label>Nome</label>
+        <input name="nome">
+        <label>Email</label>
+        <input type="email" name="email">
+        <label>Senha</label>
+        <input type="password" name="senha">
+        <label>Senha2</label>
+        <input type="password" name="confirma_senha">
+        <label>Modelo</label>
+        <input name="modelo">
+        <label>Consumo</label>
+        <input type="number" name="consumo">
+        <button type="submit">CADASTRAR</button>
+    </form>
+
+</body>
+</html>
