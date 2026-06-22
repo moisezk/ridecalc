@@ -62,11 +62,14 @@ def cadastro_app(request):
             return render(request, 'cadastro.html', context={
                 "erro_senha" : erro_senha
                 })
+        #TESTANDO SE UM USUARIO JA EXISTE - USANDO ORM DJANGO PURO MT BRABO🔥🔥🔥🔥
+        if Motorista.objects.filter(username=username).exists():
+            erro_usuario = "Email já cadastrado."
+            return render(request, 'cadastro.html', context={'erro_usuario':erro_usuario})
+        
         #AQUI EU TO SALVANDO NO BANCO DADOS, O REDIRECT É PRO USUARIO JA VOLTAR PRA TELA LOGIN
         motorista = Motorista(first_name=nome,username=username,modelo=modelo, password=senha,consumo=consumo)
         motorista.set_password(senha)
-        if Motorista:
-                #vou adicionar coisa calma, deixa pra manha sio
         motorista.save()
         return redirect('login_app')
     elif request.method=="GET":
