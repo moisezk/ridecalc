@@ -121,4 +121,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR,'templates/static')]
 
 
 #AUTENTICAÇÃO DE USUARIOS PARA O USO DO ABSTRACTUSER E ETC:::::
-AUTH_USER_MODEL = 'rotecalc.Usuario'
+AUTH_USER_MODEL = 'rotecalc.Motorista'

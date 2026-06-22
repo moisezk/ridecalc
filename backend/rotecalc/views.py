@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect #Conceito: recebo paramêtros da documentação, tais como, requisição, template e o contexto.
 from django.http import HttpResponse # nem to usando isso, foi so pra testar as vezes, ele retorna uma pagina ao inves de template ate onde eu sei
-from .models import Motorista #Importando o motomoto
+from .models import Motorista, Corrida #Importando o motomoto
 from django.contrib.auth import authenticate, login # essa delicinha é do próprio django, parceiro dms
 # Create your views here.
 
@@ -26,8 +26,13 @@ def corridas_app(request):
                          "campo_erro":campo
                 })
 
+
         #->CONVERSANDO COM MINHA FUNÇÃO DE CALCULAR
         litros_gastos, custo, lucro = calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina)
+        #AQUI EU TO SALVANDO NO BANCO OS DADOS DA CORRIDA
+        corrida = Corrida(motorista=request.user,distancia=distancia, valor_corrida=valor_corrida, lucro=lucro)
+        corrida.save()
+
         return render(request, 'ridecalc.html',
         context={
             "litros_gastos": litros_gastos,
@@ -154,6 +159,52 @@ def calcular_corrida(distancia,consumo,valor_corrida, preco_gasolina):
     lucro: float = float(valor_corrida) - custo
     return(litros_gastos,custo,lucro)
 #========================================================================>
+
+#FUNÇÃO QUE CALCULA AS MÉTRICAS PEGANDO DO BANCO DE DADOS
+def calcular_metricas(motorista):
+    #calculando métricas através de um for básico
+    corridas = Corrida.objects.filter(motorista=motorista)
+    lucro_total = 0
+    distancia_total = 0
+    soma_corridas = 0
+    media_corridas = 0
+    for corrida in corridas:
+        lucro_total += corrida.lucro
+        distancia_total += corrida.distancia
+        soma_corridas += corridas.valor_corrida
+
+    total_corridas = corridas.count()
+    #to tratando o erro no caso do total de corridas for igual 0
+    if total_corridas > 0:
+        media_corridas = soma / total_corridas
+    return{
+        "lucro_total" : lucro_total,
+        "distancia_total" : distancia_total,
+        "soma_corridas" : soma_corridas,
+        "total_corridas": total_corridas,
+        "media_corridas": media_corridas 
+    }
+#=========================<<<<<<<<<>>>>>>>>>>>==========================   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
