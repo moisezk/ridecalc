@@ -1,26 +1,179 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RideCalc — Criar conta</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
+
 <body>
-    <form action="{% url 'cadastro_app' %}" method="POST"> {% csrf_token %}
-        <label>Nome</label>
-        <input name="nome">
-        <label>Email</label>
-        <input type="email" name="email">
-        <label>Senha</label>
-        <input type="password" name="senha">
-        <label>Senha2</label>
-        <input type="password" name="confirma_senha">
-        <label>Modelo</label>
-        <input name="modelo">
-        <label>Consumo</label>
-        <input type="number" name="consumo">
-        <button type="submit">CADASTRAR</button>
-    </form>
+
+  <header class="cabecalho">
+    <div class="container">
+      <a href="/" class="logo">Ride<span>Calc</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="titulo-hero">
+      <div class="container">
+        <span class="hero-eyebrow">Crie sua conta</span>
+        <h1 id="titulo-hero">Comece a <em>calcular</em></h1>
+        <p>Cadastre seu veículo uma vez e calcule o lucro de qualquer corrida em segundos.</p>
+      </div>
+    </section>
+
+    <section class="calculadora">
+      <div class="container">
+        <article class="card">
+
+          <h2 class="card-titulo">Criar conta</h2>
+
+          {% if erro_usuario %}
+            <div class="alerta-erro">
+              {{ erro_usuario }}
+            </div>
+          {% endif %}
+
+          <form action="{% url 'cadastro_app' %}" method="POST" novalidate>
+            {% csrf_token %}
+
+            <!-- DADOS PESSOAIS -->
+            <div class="campo">
+              <label for="nome">Nome</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">✦</span>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Seu nome"
+                  required
+                  autocomplete="name"
+                />
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="email">E-mail</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">@</span>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="seu@email.com"
+                  required
+                  autocomplete="email"
+                />
+              </div>
+              {% if erro_usuario %}
+                <p class="campo-erro">{{ erro_usuario }}</p>
+              {% endif %}
+            </div>
+
+            <div class="campo">
+              <label for="senha">Senha</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">🔒</span>
+                <input
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  placeholder="••••••••"
+                  required
+                  autocomplete="new-password"
+                />
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="confirma-senha">Confirmar senha</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">🔒</span>
+                <input
+                  type="password"
+                  id="confirma-senha"
+                  name="confirma_senha"
+                  placeholder="••••••••"
+                  required
+                  autocomplete="new-password"
+                />
+              </div>
+              {% if erro_senha %}
+                <p class="campo-erro">{{ erro_senha }}</p>
+              {% endif %}
+            </div>
+
+            <hr class="divisor" />
+
+            <h3 class="card-titulo" style="font-size: 0.95rem; margin-bottom: 1rem;">
+              Seu veículo
+            </h3>
+
+            <div class="campo">
+              <label for="modelo">Modelo do veículo</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">🚗</span>
+                <input
+                  type="text"
+                  id="modelo"
+                  name="modelo"
+                  placeholder="Ex: Chevrolet Onix"
+                  required
+                  autocomplete="off"
+                  aria-describedby="dica-modelo"
+                />
+              </div>
+              <p class="campo-dica" id="dica-modelo">Marca e modelo do seu carro</p>
+            </div>
+
+            <div class="campo">
+              <label for="consumo">Consumo médio</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">km/L</span>
+                <input
+                  type="number"
+                  id="consumo"
+                  name="consumo"
+                  placeholder="12.0"
+                  min="1"
+                  step="0.5"
+                  required
+                  autocomplete="off"
+                  aria-describedby="dica-consumo"
+                />
+              </div>
+              <p class="campo-dica" id="dica-consumo">Quantos km seu veículo faz por litro</p>
+            </div>
+
+            <button type="submit" class="btn-calcular">
+              Criar conta →
+            </button>
+
+          </form>
+
+          <p class="auth-link">
+            Já tem conta?
+            <a href="{% url 'login_app' %}">Entrar</a>
+          </p>
+
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>© 2025 RideCalc &mdash; Feito para motoristas de aplicativo.</p>
+    </div>
+  </footer>
 
 </body>
 </html>

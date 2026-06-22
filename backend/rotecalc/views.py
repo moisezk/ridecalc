@@ -68,7 +68,7 @@ def cadastro_app(request):
             return render(request, 'cadastro.html', context={'erro_usuario':erro_usuario})
         
         #AQUI EU TO SALVANDO NO BANCO DADOS, O REDIRECT É PRO USUARIO JA VOLTAR PRA TELA LOGIN
-        motorista = Motorista(first_name=nome,username=username,modelo=modelo, password=senha,consumo=consumo)
+        motorista = Motorista(first_name=nome,username=username,modelo=modelo, password=senha,consumo=consumo, email=username)
         motorista.set_password(senha)
         motorista.save()
         return redirect('login_app')
@@ -83,17 +83,19 @@ def cadastro_app(request):
 #========================================VIEW LOGIN=================================
 
 def login_app(request):
-    username = request.POST.get('email')
-    senha = request.POST.get('senha')
-    usuario = authenticate(request,email=username,password=senha)
+    if request.method == 'POST':
+        username = request.POST.get('email')
+        senha = request.POST.get('senha')
+        usuario = authenticate(request,username=username,password=senha)
     #ESTOU TRATANDO O ERRO DO USUARIO NAO EXISTIR:
-    if usuario:
-        login(request, usuario)
-        redirect('corridas_app')
-    else:
-        erro_login="Usuário não encontrado."
-        return render(request,'login.html',context={"erro_login":erro_login})
-
+        if usuario:
+            login(request, usuario)
+            return redirect('corridas_app')
+        else:
+            erro_login="Usuário não encontrado."
+            return render(request,'login.html',context={"erro_login":erro_login})
+    elif request.method == 'GET':
+        return render(request, 'login.html')
 #=================================================================================
 
 

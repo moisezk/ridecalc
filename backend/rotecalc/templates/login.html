@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RideCalc — Entrar</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <header class="cabecalho">
+    <div class="container">
+      <a href="/" class="logo">Ride<span>Calc</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="titulo-hero">
+      <div class="container">
+        <span class="hero-eyebrow">Acesse sua conta</span>
+        <h1 id="titulo-hero">Bem-vindo de <em>volta</em></h1>
+        <p>Entre com seu e-mail e senha para continuar calculando seus lucros.</p>
+      </div>
+    </section>
+
+    <section class="calculadora">
+      <div class="container">
+        <article class="card">
+
+          <h2 class="card-titulo">Entrar</h2>
+
+          {% if erro_login %}
+            <div class="alerta-erro">
+              {{ erro_login }}
+            </div>
+          {% endif %}
+
+          <form action="{% url 'login_app' %}" method="POST" novalidate>
+            {% csrf_token %}
+
+            <div class="campo">
+              <label for="email">E-mail</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">@</span>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="seu@email.com"
+                  required
+                  autocomplete="email"
+                  aria-describedby="dica-email"
+                />
+              </div>
+              <p class="campo-dica" id="dica-email">O e-mail que você usou no cadastro</p>
+            </div>
+
+            <div class="campo">
+              <label for="senha">Senha</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">🔒</span>
+                <input
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  placeholder="••••••••"
+                  required
+                  autocomplete="current-password"
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-calcular">
+              Entrar →
+            </button>
+
+          </form>
+
+          <p class="auth-link">
+            Ainda não tem conta?
+            <a href="{% url 'cadastro_app' %}">Criar conta</a>
+          </p>
+
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>© 2025 RideCalc &mdash; Feito para motoristas de aplicativo.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
