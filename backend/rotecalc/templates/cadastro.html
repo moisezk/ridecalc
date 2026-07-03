@@ -150,7 +150,13 @@
                   aria-describedby="dica-consumo"
                 />
               </div>
-              <p class="campo-dica" id="dica-consumo">Quantos km seu veículo faz por litro</p>
+              {% if campo_erro == "consumo" %}
+                  <p class="campo-erro" id="dica-consumo">
+                  {{erro}}
+                  </p>
+              {% else %}
+                  <p class="campo-dica" id="dica-consumo">Quantos km seu veículo faz por litro</p>
+              {% endif %}
             </div>
 
             <button type="submit" class="btn-calcular">
@@ -171,7 +177,7 @@
 
   <footer class="rodape">
     <div class="container">
-      <p>© 2025 RideCalc &mdash; Feito para motoristas de aplicativo.</p>
+      <p>© 2026 RideCalc &mdash; Feito para motoristas de aplicativo.</p>
     </div>
   </footer>
 

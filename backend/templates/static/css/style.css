@@ -220,6 +220,8 @@ body {
 /* Os campos de entrada */
 .campo input[type="number"],
 .campo input[type="text"],
+.campo input[type="email"],
+.campo input[type="password"],
 .campo select {
   width: 100%;
   background: var(--cor-fundo);
@@ -431,6 +433,58 @@ body {
   text-align: center;
   color: var(--cor-texto-fraco);
   font-size: 0.82rem;
+}
+
+
+
+
+
+
+/*================NAV==================*/
+/* Hide the default checkbox */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cor-texto-fraco);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--cor-texto);
+}
+
+.nav-link.ativo {
+  color: var(--cor-acento);
+}
+
+
+
+
+
+/*BOTAO DE SAIR LOGOUT*/
+.btn-logout {
+    display: block;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #F5C518;
+    border: none;
+    color: #0F1117;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-logout:hover {
+    background: #E8EAF0;
+    transform: translateY(-1px);
 }
 
 

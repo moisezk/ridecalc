@@ -1,18 +1,20 @@
 from django.shortcuts import render, redirect #Conceito: recebo paramêtros da documentação, tais como, requisição, template e o contexto.
 from django.http import HttpResponse # nem to usando isso, foi so pra testar as vezes, ele retorna uma pagina ao inves de template ate onde eu sei
 from .models import Motorista, Corrida #Importando o motomoto
-from django.contrib.auth import authenticate, login # essa delicinha é do próprio django, parceiro dms
+from django.contrib.auth import authenticate, login, logout # essa delicinha é do próprio django, parceiro dms
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
 #FUNÇÃO VIEW DO SITE, CONVERSANDO COM A FUNÇÕES QUE CRIEI
 
 #=========================================VIEW CORRIDAS=========================================
+@login_required
 def corridas_app(request):
      if request.method == "POST":
-
+        motorista = request.user
         distancia = request.POST.get('distancia')
-        consumo = request.POST.get('consumo')
+        consumo = motorista.consumo
         valor_corrida = request.POST.get('valor_corrida')
         preco_gasolina = request.POST.get('preco_gasolina')
 
@@ -101,8 +103,16 @@ def login_app(request):
         return render(request, 'login.html')
 #=================================================================================
 
+#==============================VIEW LOGOUT===============================
+@login_required
+def logout_app(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect('login_app')
+
 
 #=====================================VIEW HISTORICO==============================
+@login_required
 def historico_app(request):
     if request.method == 'GET':
         motorista = request.user
@@ -168,10 +178,6 @@ def calcular_metricas(motorista):
 #AQUI EU CRIEI UM TRATAMENTO PARA ERROS
 #======================================================>
 def validar_campo(valor):
-
-    if valor == None:
-        return("O campo não pode ser vazio.")
-
     try:
         valor = float(valor)
         if valor <=0:
