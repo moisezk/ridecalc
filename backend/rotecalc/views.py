@@ -48,8 +48,6 @@ def corridas_app(request):
 
 
 
-
-
 #=================>>>>>>>>>>>>>VIEW CADASTRO<<<<<<<<<<<<=========================================
 
 def cadastro_app(request):
@@ -104,42 +102,21 @@ def login_app(request):
 #=================================================================================
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#=====================================VIEW HISTORICO==============================
+def historico_app(request):
+    if request.method == 'GET':
+        motorista = request.user
+        corridas = Corrida.objects.filter(motorista=motorista).order_by('-data')
+        resultado = calcular_metricas(motorista)
+        return render(request, 'historico.html', context={
+        "lucro_total" : resultado["lucro_total"],
+        "distancia_total" : resultado["distancia_total"],
+        "soma_corridas" : resultado["soma_corridas"],
+        "total_corridas": resultado["total_corridas"],
+        "media_corridas": resultado["media_corridas"],
+        "corridas" : corridas,
+        })
+#==================================================================================
 
 
 
@@ -171,40 +148,20 @@ def calcular_metricas(motorista):
     for corrida in corridas:
         lucro_total += corrida.lucro
         distancia_total += corrida.distancia
-        soma_corridas += corridas.valor_corrida
+        soma_corridas += corrida.valor_corrida
 
     total_corridas = corridas.count()
     #to tratando o erro no caso do total de corridas for igual 0
     if total_corridas > 0:
-        media_corridas = soma / total_corridas
+        media_corridas = soma_corridas / total_corridas
     return{
         "lucro_total" : lucro_total,
         "distancia_total" : distancia_total,
         "soma_corridas" : soma_corridas,
         "total_corridas": total_corridas,
-        "media_corridas": media_corridas 
+        "media_corridas": media_corridas,
     }
 #=========================<<<<<<<<<>>>>>>>>>>>==========================   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

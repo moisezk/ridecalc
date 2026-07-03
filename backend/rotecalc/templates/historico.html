@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RideCalc — Histórico de corridas</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/historico.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <header class="cabecalho">
+    <div class="container">
+      <a href="{% url 'corridas_app' %}" class="logo">Ride<span>Calc</span></a>
+      <nav class="nav-links">
+        <a href="{% url 'corridas_app' %}" class="nav-link">Nova corrida</a>
+        <a href="{% url 'historico_app' %}" class="nav-link ativo">Histórico</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero" aria-labelledby="titulo-hero">
+      <div class="container">
+        <span class="hero-eyebrow">Seu desempenho</span>
+        <h1 id="titulo-hero">Histórico de <em>corridas</em></h1>
+        <p>Acompanhe seus lucros, distâncias e o total de corridas realizadas.</p>
+      </div>
+    </section>
+
+    <section class="metricas" aria-labelledby="titulo-metricas">
+      <div class="container">
+
+        <h2 class="card-titulo" id="titulo-metricas">Resumo geral</h2>
+
+        <div class="metricas-grade">
+
+          <div class="metrica-item">
+            <p class="metrica-rotulo">Lucro total</p>
+            <p class="metrica-numero positivo">R$ {{ lucro_total | floatformat:2 }}</p>
+          </div>
+
+          <div class="metrica-item">
+            <p class="metrica-rotulo">Total de corridas</p>
+            <p class="metrica-numero destaque">{{ total_corridas }}</p>
+          </div>
+
+          <div class="metrica-item">
+            <p class="metrica-rotulo">Distância total</p>
+            <p class="metrica-numero">{{ distancia_total | floatformat:1 }} km</p>
+          </div>
+
+          <div class="metrica-item">
+            <p class="metrica-rotulo">Média por corrida</p>
+            <p class="metrica-numero">R$ {{ media_corridas | floatformat:2 }}</p>
+          </div>
+
+          <div class="metrica-item">
+            <p class="metrica-rotulo">Faturamento bruto</p>
+            <p class="metrica-numero">R$ {{ soma_corridas | floatformat:2 }}</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="historico-section" aria-labelledby="titulo-historico">
+      <div class="container">
+
+        <article class="card">
+
+          <h2 class="card-titulo" id="titulo-historico">Corridas realizadas</h2>
+
+          {% if corridas %}
+
+            <div class="tabela-wrapper">
+              <table class="tabela-corridas" role="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Distância</th>
+                    <th scope="col">Lucro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for corrida in corridas %}
+                  <tr>
+                    <td>{{ corrida.data | date:"d/m/Y H:i" }}</td>
+                    <td>R$ {{ corrida.valor_corrida | floatformat:2 }}</td>
+                    <td>{{ corrida.distancia | floatformat:1 }} km</td>
+                    <td>
+                      {% if corrida.lucro > 0 %}
+                        <span class="lucro-badge positivo">R$ {{ corrida.lucro | floatformat:2 }}</span>
+                      {% else %}
+                        <span class="lucro-badge negativo">R$ {{ corrida.lucro | floatformat:2 }}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+
+          {% else %}
+
+            <div class="estado-vazio">
+              <p class="estado-vazio-titulo">Nenhuma corrida registrada</p>
+              <p class="estado-vazio-dica">Calcule sua primeira corrida para começar a acompanhar seu histórico.</p>
+              <a href="{% url 'corridas_app' %}" class="btn-calcular" style="display:inline-block;width:auto;padding:0.85rem 2rem;text-decoration:none;">
+                Calcular corrida →
+              </a>
+            </div>
+
+          {% endif %}
+
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>© 2025 RideCalc &mdash; Feito para motoristas de aplicativo.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

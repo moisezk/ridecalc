@@ -1,0 +1,145 @@
+/* =====================================================
+   RideCalc — Estilos da página de histórico
+   Arquivo: historico.css
+   Importar junto com style.css
+   ===================================================== */
+
+/* NAV LINKS NO CABEÇALHO */
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cor-texto-fraco);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--cor-texto);
+}
+
+.nav-link.ativo {
+  color: var(--cor-acento);
+}
+
+/* SEÇÃO DE MÉTRICAS */
+.metricas {
+  padding: 0 0 2rem;
+}
+
+.metricas .metricas-grade {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin-top: 1rem;
+}
+
+/* SEÇÃO DO HISTÓRICO */
+.historico-section {
+  padding: 0 0 4rem;
+}
+
+/* TABELA */
+.tabela-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+}
+
+.tabela-corridas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  table-layout: fixed;
+}
+
+.tabela-corridas thead {
+  background: var(--cor-fundo);
+}
+
+.tabela-corridas th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cor-texto-fraco);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela-corridas td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--cor-borda);
+  color: var(--cor-texto);
+  font-family: var(--fonte-corpo);
+}
+
+.tabela-corridas tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela-corridas tbody tr:hover {
+  background: rgba(245, 197, 24, 0.04);
+}
+
+/* BADGE DE LUCRO */
+.lucro-badge {
+  display: inline-block;
+  font-family: var(--fonte-titulo);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+}
+
+.lucro-badge.positivo {
+  background: rgba(76, 175, 80, 0.12);
+  color: var(--cor-sucesso);
+}
+
+.lucro-badge.negativo {
+  background: rgba(244, 67, 54, 0.12);
+  color: var(--cor-perigo);
+}
+
+/* ESTADO VAZIO */
+.estado-vazio {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.estado-vazio-titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--cor-texto);
+}
+
+.estado-vazio-dica {
+  font-size: 0.9rem;
+  color: var(--cor-texto-fraco);
+  margin-bottom: 1.5rem;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 480px) {
+  .metricas .metricas-grade {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tabela-corridas th,
+  .tabela-corridas td {
+    padding: 0.7rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+  }
+}
