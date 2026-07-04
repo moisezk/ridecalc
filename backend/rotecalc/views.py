@@ -70,6 +70,11 @@ def cadastro_app(request):
             })
 
 #TRATANDO CONFIRMAÇÃO DE SENHA BEM BASICAO
+        if not senha or not confirma_senha:
+            return render(request, 'cadastro.html', context={
+            "erro_senha": "Preencha todos os campos de senha."
+            })
+
         if senha != confirma_senha:
             erro_senha = "Senha não confere."
             return render(request, 'cadastro.html', context={
