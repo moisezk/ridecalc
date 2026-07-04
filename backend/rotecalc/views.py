@@ -3,6 +3,7 @@ from django.http import HttpResponse # nem to usando isso, foi so pra testar as 
 from .models import Motorista, Corrida #Importando o motomoto
 from django.contrib.auth import authenticate, login, logout # essa delicinha é do próprio django, parceiro dms
 from django.contrib.auth.decorators import login_required
+import re
 # Create your views here.
 
 
@@ -60,6 +61,13 @@ def cadastro_app(request):
         confirma_senha = request.POST.get('confirma_senha')
         modelo = request.POST.get('modelo')
         consumo = request.POST.get('consumo')
+
+
+#TRATANDO ERRO DE @ COM MASCARA NO CAMPO
+        if not re.match(r"[^@\s]+@[^@\s]+\.[^@\s]+", username):
+            return render(request, 'cadastro.html', context={
+                'erro_usuario': 'Digite um e-mail válido.'
+            })
 
 #TRATANDO CONFIRMAÇÃO DE SENHA BEM BASICAO
         if senha != confirma_senha:
@@ -121,14 +129,24 @@ def perfil_app(request):
         modelo = request.POST.get("modelo")
         consumo = request.POST.get("consumo")
 
-        motorista.modelo = modelo
-        motorista.cosnumo = consumo
-        motorista.save()
+        if consumo:
+            erro = validar_campo(consumo)
+            if erro:
+                return render(request, "perfil.html", context={
+                    "motorista": motorista,
+                    "erro": erro,
+                    "campo_erro": "consumo"
+                })
+            motorista.consumo = consumo
 
+        if modelo:
+            motorista.modelo = modelo
+
+        motorista.save()
         return redirect("perfil_app")
-    return render(request, "perfil_app.html",
-    context={
-        "motorista" : motorista
+
+    return render(request, "perfil.html", context={
+        "motorista": motorista
     })
 
 

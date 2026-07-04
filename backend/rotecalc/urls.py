@@ -9,4 +9,5 @@ urlpatterns = [
     path('login/', views.login_app, name="login_app"),
     path('historico/', views.historico_app, name="historico_app"),
     path('logout/', views.logout_app, name='logout_app'),
+    path('perfil/', views.perfil_app, name='perfil_app'),
 ]

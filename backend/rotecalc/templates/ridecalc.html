@@ -39,16 +39,7 @@
       <nav class="nav-links">
         <a href="{% url 'corridas_app' %}" class="nav-link ativo">Nova corrida</a>
         <a href="{% url 'historico_app' %}" class="nav-link">Histórico</a>
-        <a>
-        <form action="{% url 'logout_app' %}" method="POST">
-          {% csrf_token %}
-          <button type="submit" class="btn-logout">
-            <a href="{% url 'logout_app' %}">
-              <i class="fa-solid fa-right-from-bracket"></i>
-            </a>
-          </button>
-        </form>
-      </a>
+        <a href="{% url 'perfil_app' %}" class="nav-link">Perfil</a>
       </nav>
     </div>
   </header>

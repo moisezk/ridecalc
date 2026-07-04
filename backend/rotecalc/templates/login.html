@@ -54,8 +54,9 @@
                   name="email"
                   placeholder="seu@email.com"
                   required
+                  pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                  title="Digite um e-mail válido com @"
                   autocomplete="email"
-                  aria-describedby="dica-email"
                 />
               </div>
               <p class="campo-dica" id="dica-email">O e-mail que você usou no cadastro</p>

@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RideCalc — Meu perfil</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <header class="cabecalho">
+    <div class="container">
+      <a href="{% url 'corridas_app' %}" class="logo">Ride<span>Calc</span></a>
+      <nav class="nav-links">
+        <a href="{% url 'corridas_app' %}" class="nav-link">Nova corrida</a>
+        <a href="{% url 'historico_app' %}" class="nav-link">Histórico</a>
+        <a href="{% url 'perfil_app' %}" class="nav-link ativo">Perfil</a>
+        <form action="{% url 'logout_app' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="btn-logout">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero" aria-labelledby="titulo-hero">
+      <div class="container">
+        <span class="hero-eyebrow">Sua conta</span>
+        <h1 id="titulo-hero">Seu <em>perfil</em></h1>
+        <p>Veja suas informações e mantenha os dados do seu veículo atualizados.</p>
+      </div>
+    </section>
+
+    <section class="perfil-section">
+      <div class="container">
+
+        <!-- CARD: DADOS PESSOAIS -->
+        <article class="card" style="margin-bottom: 1.5rem;">
+
+          <h2 class="card-titulo">Dados pessoais</h2>
+
+          <div class="perfil-grade">
+
+            <div class="perfil-item">
+              <p class="perfil-rotulo">Nome</p>
+              <p class="perfil-valor">{{ motorista.first_name }}</p>
+            </div>
+
+            <div class="perfil-item">
+              <p class="perfil-rotulo">E-mail</p>
+              <p class="perfil-valor">{{ motorista.email }}</p>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- CARD: VEÍCULO -->
+        <article class="card">
+
+          <h2 class="card-titulo">Seu veículo</h2>
+
+          <div class="perfil-grade" style="margin-bottom: 2rem;">
+
+            <div class="perfil-item">
+              <p class="perfil-rotulo">Modelo</p>
+              <p class="perfil-valor">{{ motorista.modelo }}</p>
+            </div>
+
+            <div class="perfil-item">
+              <p class="perfil-rotulo">Consumo médio</p>
+              <p class="perfil-valor">{{ motorista.consumo }} km/L</p>
+            </div>
+
+          </div>
+
+          <hr class="divisor" />
+
+          <h3 class="card-titulo" style="font-size: 0.95rem; margin-bottom: 1rem;">
+            Atualizar veículo
+          </h3>
+
+          {% if mensagem %}
+            <p class="campo-dica" style="color: var(--cor-sucesso); margin-bottom: 1rem;">{{ mensagem }}</p>
+          {% endif %}
+
+          <form action="{% url 'perfil_app' %}" method="POST" novalidate>
+            {% csrf_token %}
+
+            <div class="campo">
+              <label for="modelo">Modelo do veículo</label>
+              <div class="input-wrapper">
+                <span class="input-prefixo" aria-hidden="true">🚗</span>
+                <input
+                  type="text"
+                  id="modelo"
+                  name="modelo"
+                  placeholder="{{ motorista.modelo }}"
+                  autocomplete="off"
+                />
+              </div>
+              <p class="campo-dica">Deixe em branco para manter o atual</p>
+            </div>
+
+            <div class="campo">
+              <label for="consumo">Consumo médio</label>
+              <div class="input-wrapper">
+                <span class="input-sufixo" aria-hidden="true">km/L</span>
+                <input
+                  type="number"
+                  id="consumo"
+                  name="consumo"
+                  placeholder="{{ motorista.consumo }}"
+                  min="1"
+                  step="0.5"
+                  autocomplete="off"
+                />
+              </div>
+              <p class="campo-dica">Deixe em branco para manter o atual</p>
+            </div>
+                {% if campo_erro == "consumo" %}
+                    <p class="campo-erro" id="dica-consumo">
+                  {{erro}}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+            <button type="submit" class="btn-calcular">
+              Salvar alterações →
+            </button>
+
+          </form>
+
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>© 2026 RideCalc &mdash; Feito para motoristas de aplicativo.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

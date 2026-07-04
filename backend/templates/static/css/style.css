@@ -217,6 +217,16 @@ body {
   user-select: none;    /* não é selecionável pelo usuário */
 }
 
+.input-sufixo {
+  position: absolute; /* fica "em cima" do input, à esquerda */
+  right: 3rem;
+  color: var(--cor-acento);
+  font-weight: 600;
+  font-size: 0.9rem;
+  pointer-events: none; /* não bloqueia cliques no input */
+  user-select: none;    /* não é selecionável pelo usuário */
+}
+
 /* Os campos de entrada */
 .campo input[type="number"],
 .campo input[type="text"],
@@ -483,7 +493,8 @@ body {
 }
 
 .btn-logout:hover {
-    background: #E8EAF0;
+    background: #ffffff;
+    color: #ffd000;
     transform: translateY(-1px);
 }
 

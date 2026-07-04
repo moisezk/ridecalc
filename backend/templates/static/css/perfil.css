@@ -1,0 +1,45 @@
+/* =====================================================
+   RideCalc — Estilos da página de perfil
+   Arquivo: perfil.css
+   Importar junto com style.css
+   ===================================================== */
+
+.perfil-section {
+  padding: 0 0 4rem;
+}
+
+.perfil-grade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.perfil-item {
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.perfil-rotulo {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cor-texto-fraco);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+
+.perfil-valor {
+  font-family: var(--fonte-titulo);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cor-texto);
+  word-break: break-all;
+}
+
+@media (max-width: 480px) {
+  .perfil-grade {
+    grid-template-columns: 1fr;
+  }
+}
