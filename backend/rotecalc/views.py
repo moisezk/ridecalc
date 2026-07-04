@@ -103,12 +103,33 @@ def login_app(request):
         return render(request, 'login.html')
 #=================================================================================
 
-#==============================VIEW LOGOUT===============================
+#===================================VIEW LOGOUT===============================
 @login_required
 def logout_app(request):
     if request.method == "POST":
         logout(request)
         return redirect('login_app')
+
+#=======================================================================
+
+#===================================VIEW PERFIL========================
+
+@login_required
+def perfil_app(request):
+    motorista = request.user
+    if request.method == "POST":
+        modelo = request.POST.get("modelo")
+        consumo = request.POST.get("consumo")
+
+        motorista.modelo = modelo
+        motorista.cosnumo = consumo
+        motorista.save()
+
+        return redirect("perfil_app")
+    return render(request, "perfil_app.html",
+    context={
+        "motorista" : motorista
+    })
 
 
 #=====================================VIEW HISTORICO==============================
@@ -127,9 +148,6 @@ def historico_app(request):
         "corridas" : corridas,
         })
 #==================================================================================
-
-
-
 
 
 #=========================FUNÇÕES DO APP================================>
@@ -172,7 +190,6 @@ def calcular_metricas(motorista):
         "media_corridas": media_corridas,
     }
 #=========================<<<<<<<<<>>>>>>>>>>>==========================   
-
 
 
 #AQUI EU CRIEI UM TRATAMENTO PARA ERROS
